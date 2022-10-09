@@ -19,16 +19,14 @@
  */
 
 import Timeout from 'await-timeout';
-
 import { LoggerOptions } from '../types/logger';
-
 import throttle from './throttle';
 
 enum LogLevel {
   Info = 'INFO',
 }
 
-export default class LoggerJS {
+export default class Logger {
   private logs: any[];
   private isSyncing: boolean;
   private readonly meta: () => Record<any, any> = () => ({});
