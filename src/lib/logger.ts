@@ -18,24 +18,26 @@
  * @returns a Promise which should contain `['a','b','c']`
  */
 
-import Timeout from "await-timeout";
-import throttle from "./throttle";
-import { LoggerOptions } from "../types/logger";
+import Timeout from 'await-timeout';
+
+import { LoggerOptions } from '../types/logger';
+
+import throttle from './throttle';
 
 enum LogLevel {
-  Info = "INFO",
+  Info = 'INFO',
 }
 
 export default class LoggerJS {
-  private logs: any[] = [];
-  private isSyncing = false;
-  private meta: (() => Record<any, any>) = () => ({});
-  private persistLogs: ((logs: any[]) => void) = (logs) => { };
-  private postHandler: ((logs: any[]) => void) = () => { };
+  private logs: any[];
+  private isSyncing: boolean;
+  private readonly meta: () => Record<any, any> = () => ({});
+  private readonly persistLogs: (logs: readonly any[]) => void = () => {};
+  private readonly postHandler: (logs: readonly any[]) => void = () => {};
   private LOG_SYNC_INTERVAL = 5000;
 
   // A throttled sync. Can't be invoked more than once in LOG_SYNC_INTERVAL ms
-  private sync: any;
+  private readonly sync: any;
 
   constructor(options: LoggerOptions) {
     const { meta, persistHandler, postHandler, syncInterval } = options;
@@ -46,6 +48,8 @@ export default class LoggerJS {
     if (syncInterval) {
       this.LOG_SYNC_INTERVAL = syncInterval;
     }
+    this.logs = [];
+    this.isSyncing = false;
 
     // Throttled sync
     this.sync = throttle(this._sync, this.LOG_SYNC_INTERVAL, {
@@ -74,7 +78,6 @@ export default class LoggerJS {
         throw new Error(`Error while info logging ${error}`);
       });
     }
-
   }
 
   /**
@@ -124,7 +127,7 @@ export default class LoggerJS {
   async _sync() {
     // if we are already syncing skip
     if (this.isSyncing || !this.logsCount()) {
-      return false;
+      return;
     }
     try {
       // indicate we are syning

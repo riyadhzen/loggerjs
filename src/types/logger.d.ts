@@ -1,6 +1,6 @@
-export interface LoggerOptions {
-  meta: () => Record<any, any>;
-  persistHandler: (logs: any[]) => void;
-  postHandler: (logs: any[]) => void;
-  syncInterval?: number;
-}
+export type LoggerOptions = {
+  readonly meta: () => Record<any, any>;
+  readonly persistHandler: (logs: readonly any[]) => void;
+  readonly postHandler: (logs: readonly any[]) => void;
+  readonly syncInterval?: number;
+};
