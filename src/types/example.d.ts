@@ -17,7 +17,7 @@
  * something();
  * ```
  */
-declare module 'loggerjs' {
+declare module 'logger-remote' {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const LoggerJS: any;
   export = LoggerJS;

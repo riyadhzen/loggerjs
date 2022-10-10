@@ -19,19 +19,24 @@
  */
 
 import Timeout from 'await-timeout';
-import { LoggerOptions } from '../types/logger';
 import throttle from './throttle';
 
 enum LogLevel {
   Info = 'INFO',
 }
+interface LoggerOptions {
+  meta: () => Record<any, any>;
+  persistHandler: (logs: any[]) => void;
+  postHandler: (logs: any[]) => void;
+  syncInterval?: number;
+};
 
 export default class Logger {
   private logs: any[];
   private isSyncing: boolean;
   private readonly meta: () => Record<any, any> = () => ({});
-  private readonly persistLogs: (logs: readonly any[]) => void = () => {};
-  private readonly postHandler: (logs: readonly any[]) => void = () => {};
+  private readonly persistLogs: (logs: any[]) => void = () => { };
+  private readonly postHandler: (logs: any[]) => void = () => { };
   private LOG_SYNC_INTERVAL = 5000;
 
   // A throttled sync. Can't be invoked more than once in LOG_SYNC_INTERVAL ms
